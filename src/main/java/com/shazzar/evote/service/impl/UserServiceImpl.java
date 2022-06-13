@@ -3,24 +3,29 @@ package com.shazzar.evote.service.impl;
 import com.shazzar.evote.dto.Mapper;
 import com.shazzar.evote.dto.requestDto.UserRequestDto;
 import com.shazzar.evote.dto.responseDto.UserResponseDto;
+import com.shazzar.evote.entity.Position;
 import com.shazzar.evote.entity.User;
 import com.shazzar.evote.entity.enums.Role;
 import com.shazzar.evote.entity.enums.Status;
 import com.shazzar.evote.exception.ResourceNotFoundException;
+import com.shazzar.evote.repository.PositionRepo;
 import com.shazzar.evote.repository.UserRepository;
 import com.shazzar.evote.service.UserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PositionRepo positionRepo;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PositionRepo positionRepo) {
         this.userRepository = userRepository;
+        this.positionRepo = positionRepo;
     }
 
     @Override
@@ -39,10 +44,18 @@ public class UserServiceImpl implements UserService {
             user.setStatus(Status.DEACTIVATED);
         }
 
-        if ((userRequestDto.getRole() == Role.CANDIDATE) && (userRequestDto.getPosition() == null)) {
-            new IllegalArgumentException("Position field must not be empty for candidate");
+        if(userRequestDto.getRole() == Role.CANDIDATE){
+
+            Optional<Position> position = positionRepo.findById(userRequestDto.getPositionId());
+
+            if(position.isPresent()){
+                user.setPosition(position.get());
+            } else {
+                new IllegalArgumentException("Position field must not be empty for candidate");
+            }
         }
-        user.setPosition(userRequestDto.getPosition());
+
+
 
         userRepository.save(user);
         return Mapper.userToUserResponseDto(user);

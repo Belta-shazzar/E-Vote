@@ -15,13 +15,5 @@ public class UserRequestDto {
     private String email;
     private String password;
     private Role role;
-    private Position position;
-
-    public UserRequestDto(String firstName, String lastName, String email, String password, Role role) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
+    private Long positionId;
 }

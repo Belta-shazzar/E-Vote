@@ -17,6 +17,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.Optional;
+
 @SpringBootApplication
 public class EVoteApplication implements CommandLineRunner {
 
@@ -49,19 +51,23 @@ public class EVoteApplication implements CommandLineRunner {
 //        User user1 = userRepository.findById(1l).get();
 //        User user2 = userRepository.findById(2l).get();
 //
-        Event event1 = eventRepository.findById(1l).get();
+
+        Optional<Event> event1 = eventRepository.findById(1l);
+
+        if(event1.isPresent()) {
 //
-        PositionRequestDto positionRequestDto1 = new PositionRequestDto("SUG President", event1);
-        PositionRequestDto positionRequestDto2 = new PositionRequestDto("SUG Vice", event1);
-        PositionRequestDto positionRequestDto3 = new PositionRequestDto("SUG Sec Gen", event1);
-        PositionRequestDto positionRequestDto4 = new PositionRequestDto("D.O.S", event1);
-        PositionRequestDto positionRequestDto5 = new PositionRequestDto("D.O.G", event1);
+            PositionRequestDto positionRequestDto1 = new PositionRequestDto("SUG President", event1.get());
+            PositionRequestDto positionRequestDto2 = new PositionRequestDto("SUG Vice", event1.get());
+            PositionRequestDto positionRequestDto3 = new PositionRequestDto("SUG Sec Gen", event1.get());
+            PositionRequestDto positionRequestDto4 = new PositionRequestDto("D.O.S", event1.get());
+            PositionRequestDto positionRequestDto5 = new PositionRequestDto("D.O.G", event1.get());
 //
-        positionService.createPosition(positionRequestDto1);
-        positionService.createPosition(positionRequestDto2);
-        positionService.createPosition(positionRequestDto3);
-        positionService.createPosition(positionRequestDto4);
-        positionService.createPosition(positionRequestDto5);
+            positionService.createPosition(positionRequestDto1);
+            positionService.createPosition(positionRequestDto2);
+            positionService.createPosition(positionRequestDto3);
+            positionService.createPosition(positionRequestDto4);
+            positionService.createPosition(positionRequestDto5);
+        }
 
 //
 //        EventRequestDto eventRequestDto1 = new EventRequestDto("UNN", user1);

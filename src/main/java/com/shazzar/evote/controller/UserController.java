@@ -23,7 +23,7 @@ public class UserController {
     }
 
 //    http://localhost:8082/user/add-user
-    @PostMapping(value = "/add-user", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/add-user")
     public ResponseEntity<UserResponseDto> addUser(@RequestBody @Validated UserRequestDto userRequestDto) {
         UserResponseDto userResponseDto = userService.addUser(userRequestDto);
 
